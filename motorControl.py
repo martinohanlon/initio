@@ -157,40 +157,40 @@ if __name__ == '__main__':
         GPIO.setmode(GPIO.BOARD)
         
         #create motor control
-        motorControl = MotorController()
+        motors = MotorController()
 
         #forward
         print("forward")
-        motorControl.start(100)
+        motors.start(100)
         time.sleep(2)
         
         print("encoder ticks")
-        print(motorControl.motorA.totalTicks)
-        print(motorControl.motorB.totalTicks)
+        print(motors.motorA.totalTicks)
+        print(motors.motorB.totalTicks)
         
         #backward 
         print("backward")
-        motorControl.start(-50)
+        motors.start(-50)
         time.sleep(2)
 
         #forward curve
         print("forward curve")
-        motorControl.start(100,50)
+        motors.start(100,50)
         time.sleep(2)
 
         #rotate left
         print("rotate left")
-        motorControl.rotateLeft(50)
+        motors.rotateLeft(50)
         time.sleep(2)
 
         #rotate right
         print("rotate right")
-        motorControl.rotateRight(50)
+        motors.rotateRight(50)
         time.sleep(2)
         
         #stop
         print("stop")
-        motorControl.stop()
+        motors.stop()
 
     #Ctrl C
     except KeyboardInterrupt:

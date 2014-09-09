@@ -137,8 +137,11 @@ class Motor:
     def _calcPowerAndFreq(self, power):
         # make power between 0 and 100
         power = max(0,min(100,abs(power)))
+        #my fudge factor
+        power = power - ((100 - power) / 7) 
         # make half of freq, minimum of 11
         freq = max(11,abs(power/2))
+        #freq = 50
         return power, freq
     
     #forward
@@ -170,38 +173,22 @@ if __name__ == '__main__':
         #create motor control
         motors = MotorController()
 
-        #forward
-        print("forward")
-        motors.start(100)
-        time.sleep(2)
-        
-        print("encoder ticks")
-        print(motors.motorA.totalTicks)
-        print(motors.motorB.totalTicks)
-        
-        #backward 
-        print("backward")
-        motors.start(-50)
-        time.sleep(2)
+        #run 1
+        motors.motorA.start(100)
+        time.sleep(3)
+        motors.motorA.stop()
+        run1ticks = motors.motorA.totalTicks
+        print "run1 " + str(run1ticks)
+        motors.motorA.resetTotalTicks()
 
-        #forward curve
-        print("forward curve")
-        motors.start(100,50)
-        time.sleep(2)
-
-        #rotate left
-        print("rotate left")
-        motors.rotateLeft(50)
-        time.sleep(2)
-
-        #rotate right
-        print("rotate right")
-        motors.rotateRight(50)
-        time.sleep(2)
+        #run 2        
+        motors.motorA.start(50)
+        time.sleep(3)
+        motors.motorA.stop()
+        run2ticks = motors.motorA.totalTicks
+        print "run2 " + str(run2ticks)
+        print "ratio " + str(float(run2ticks) / float(run1ticks))
         
-        #stop
-        print("stop")
-        motors.stop()
 
     #Ctrl C
     except KeyboardInterrupt:

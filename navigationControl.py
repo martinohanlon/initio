@@ -60,12 +60,16 @@ class NavigationController:
         return self.state
 
     #move the robot in a straight line
-    def straight(self, power, distance = None):
+    def straight(self, power, distance = None, ownThread = False):
         # if distance is not passed, continues forever and launches a seperate thread
-        # if distance is passed, loops until distance is reached and blocks
+        # if distance is passed, loops until distance is reached
         if distance == None:
             #set a really long distance - this is a 'bit' dirty...  But simple!
             distance = 99999999999
+            #call it in its own thread
+            ownThread = True
+            
+        if ownThread:
             #call it in its own thread
             thread.start_new_thread(self._straight,(power, distance))
         else:
@@ -81,9 +85,6 @@ class NavigationController:
         if(self.state != STATESTOPPED): self.stop()
         
         #turn on both motors
-        # - motor a to 5% less than the power
-        # - motor b to the power
-        # - this is so we dont get a wiggle when the robot sets off
         self.motors.start(power, power)
 
         #change state to moving
@@ -133,7 +134,13 @@ class NavigationController:
 
     #turn the robot
     # if radius is not passed, robot turns on its axis)
-    def turn(self, power, angle, radius = 0):
+    def turn(self, power, angle, radius = 0, ownThread = False):
+        if ownThread:
+            thread.start_new_thread(self._turn,(power, angle, radius))
+        else:
+            self._turn(power, angle, radius)
+
+    def _turn(self, power, angle, radius):
 
         #convert radius
         if self.distanceInMM: radius = self._convertMillimetersToTicks(radius)
@@ -142,8 +149,9 @@ class NavigationController:
         wheelALength = (angle / 360.0) * (2 * math.pi *(radius - (WHEELGAP / 2)))
         wheelBLength = (angle / 360.0) * (2 * math.pi *(radius + (WHEELGAP / 2)))
 
-        print wheelALength
-        print wheelBLength
+        #debug
+        #print wheelALength
+        #print wheelBLength
 
         #work out the outside and inside wheels
         #the wheel which is going further is the outside wheel
@@ -165,7 +173,8 @@ class NavigationController:
             outsideMotor = motors.motorB
             insideMotor = motors.motorA
 
-        print speedDiff
+        #debug
+        #print speedDiff
 
         #calc the speed based on the power and the differentiator
         outsidePower = power

@@ -23,9 +23,21 @@ if __name__ == '__main__':
         #setup xbox controller values
         x1 = 0
         y1 = 0
+        #TODO
+        #yButton = False
+        #bButton = False
 
         #read xbox controller event stream
+
         for event in xbox_read.event_stream(deadzone=7000, scale=101):
+
+            #TODO - if the Y button and B button are both pressed, exit
+            #it does exit but the program does finish due to xbox_read not exiting!
+            #if event.key=='Y': yButton = event.is_press()
+            #if event.key=='B': bButton = event.is_press()
+            #if yButton and bButton: break
+
+            #analogue stick
             if event.key=='X1':
                 x1 = event.value
                 #print("X1 - " + str(event.value))
@@ -45,7 +57,7 @@ if __name__ == '__main__':
             #print angle
             #print length
 
-            #work out actrant
+            #work out actrant (like quadrants but eights!)
             # - where the stick is pointing determins how the motors are controlled
             # - calculate the powers of motor a and b
             # disclaimer - Im not convinced this is the easiest or most efficient way of doing this, but I cant think of a better way!
@@ -117,8 +129,8 @@ if __name__ == '__main__':
             #if the power is 0 stop the motors
             if powerA == 0 and powerB == 0:
                 motors.stop()
-            else:
             #otherwise start them up
+            else:
                 motors.start(powerA, powerB)
 
     #Ctrl C
@@ -131,6 +143,7 @@ if __name__ == '__main__':
         raise
 
     finally:
+        print 
         print ("cleanup")
         #cleanup gpio
         GPIO.cleanup()

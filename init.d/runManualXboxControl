@@ -18,7 +18,7 @@ case "$1" in
   start)
     echo "Starting Initio - manual xbox control"
     # run application you want to start
-    python /home/pi/dev/initio/manualXboxControl.py
+    python /home/pi/dev/initio/manualXboxControl.py &
     ;;
   stop)
     echo "Stopping Initio - manual xbox control"

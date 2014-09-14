@@ -1,0 +1,2 @@
+sudo cp /home/pi/dev/initio/init.d/runManualXboxControl /etc/init.d
+sudo update-rc.d runManualXboxControl defaults

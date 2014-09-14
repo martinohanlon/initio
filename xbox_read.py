@@ -12,6 +12,7 @@ import sys
 
 s = re.compile('[ :]')
 
+
 class Event:
     def __init__(self,key,value,old_value):
         self.key = key
@@ -87,4 +88,4 @@ if __name__ == '__main__':
             print("Y Pressed")
         if event.key=='Y' and not event.is_press():
             print("Y Released")
-
+            

@@ -146,12 +146,12 @@ class NavigationController:
         if self.distanceInMM: radius = self._convertMillimetersToTicks(radius)
 
         #calculate lengths of the turning arc for both wheels
-        wheelALength = (angle / 360.0) * (2 * math.pi *(radius - (WHEELGAP / 2)))
-        wheelBLength = (angle / 360.0) * (2 * math.pi *(radius + (WHEELGAP / 2)))
+        wheelALength = (angle / 360.0) * (2 * math.pi *(radius + (WHEELGAP / 2)))
+        wheelBLength = (angle / 360.0) * (2 * math.pi *(radius - (WHEELGAP / 2)))
 
         #debug
-        #print wheelALength
-        #print wheelBLength
+        print "wheelALength" + str(wheelALength)
+        print "wheelBLength" + str(wheelBLength)
 
         #work out the outside and inside wheels
         #the wheel which is going further is the outside wheel
@@ -180,8 +180,8 @@ class NavigationController:
         outsidePower = power
         insidePower = (power / speedDiff) * TURNINSIDEWHEELFUDGE
         #debug
-        #print outsidePower
-        #print insidePower
+        print outsidePower
+        print insidePower
         
         #is the length negative?  If so negate the power
         if outsideLength < 0: outsidePower = outsidePower * -1
@@ -207,13 +207,15 @@ class NavigationController:
             #print "insideMotor.currentTicks " + str(insideMotor.currentTicks)
 
             motorError = insideMotor.currentTicks - insideWheelTarget
-            #debug
-            #print "motorError " + str(motorError)
+            
             
             #has the error changed?
             if motorError != lastMotorError:
+                #debug
+                #print "motorError " + str(motorError)
+
                 #work out the value to slow the motor down by using the KP
-                powerChange = (motorError * KPTURN)
+                powerChange = (abs(motorError) * KPTURN)
                 #debug
                 #print "powerChange " + str(powerChange)
                 
@@ -254,6 +256,8 @@ if __name__ == '__main__':
         #create navigation control, use True for distances in millimeters
         nav = NavigationController(motors, True)
 
+        #time.sleep(10)
+
         #run a straight line just through motor control
         #print("straight line, no correction")
         #motors.start(100,100)
@@ -274,7 +278,7 @@ if __name__ == '__main__':
         
         #run a straight line through nav control
         #print("straight line, with correction")
-        #nav.straight(100, 500)
+        #nav.straight(100, 2000)
         #get length
         #print("encoder ticks")
         #print(motors.motorA.totalTicks)
@@ -282,15 +286,16 @@ if __name__ == '__main__':
 
         #run a straight line threaded
         #print("straight line threaded")
-        #nav.straight(100)
-        #time.sleep(3)
-        #nav.stop()
+        time.sleep(5)
+        nav.straight(100, 10000)
+        time.sleep(3)
+        nav.stop()
 
         #turn 90 degrees with a 150 radius at 80% power
-        nav.turn(80, 90, 500)
-        print("encoder ticks")
-        print(motors.motorA.totalTicks)
-        print(motors.motorB.totalTicks)
+        #nav.turn(100, 90, 1000)
+        #print("encoder ticks")
+        #print(motors.motorA.totalTicks)
+        #print(motors.motorB.totalTicks)
 
     #Ctrl C
     except KeyboardInterrupt:

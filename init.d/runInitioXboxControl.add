@@ -1,0 +1,2 @@
+sudo cp /home/pi/dev/initio/init.d/runInitioXboxControl /etc/init.d
+sudo update-rc.d runInitioXboxControl defaults
